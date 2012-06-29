@@ -1,27 +1,60 @@
-This is Perl module CGI::ExceptionManager.
+NAME
+    CGI::ExceptionManager - DebugScreen with detach!
 
-INSTALLATION
+SYNOPSIS
+        use CGI::ExceptionManager;
+        CGI::ExceptionManager->run(
+            callback => sub {
+                redirect("http://wassr.jp/");
 
-CGI::ExceptionManager installation is straightforward. If your CPAN shell is set up,
-you should just be able to do
+                # do not reach here
+            },
+            powered_by => 'MENTA',
+        );
 
-    % cpan CGI::ExceptionManager
+        sub redirect {
+            my $location = shift;
+            print "Status: 302\n";
+            print "Location: $location\n";
+            print "\n";
 
-Download it, unpack it, then build it as per the usual:
+            CGI::ExceptionManager::detach();
+        }
 
-    % perl Makefile.PL
-    % make && make test
+DESCRIPTION
+    You can easy to implement DebugScreen and Detach architecture =)
 
-Then install it:
+METHODS
+    detach
+        detach from current context.
 
-    % make install
+    run
+            CGI::ExceptionManager->run(
+                callback => \&code,
+                powered_by => 'MENTA',
+            );
 
-DOCUMENTATION
+        run the new context.
 
-CGI::ExceptionManager documentation is available as in POD. So you can do:
+        You can specify your own renderer like following code:
 
-    % perldoc CGI::ExceptionManager
+            CGI::ExceptionManager->run(
+                callback   => \&code,
+                powered_by => 'MENTA',
+                renderer   => sub {
+                },
+            );
 
-to read the documentation online with your favorite pager.
+AUTHOR
+    Tokuhiro Matsuno <tokuhirom@gmail.com>
 
-Tokuhiro Matsuno
+    Kazuho Oku
+
+SEE ALSO
+    Sledge::Plugin::DebugScreen,
+    <http://kazuho.31tools.com/nanoa/nanoa.cgi>, <http://gp.ath.cx/menta/>
+
+LICENSE
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
